@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Captcha Form</title>
+    <style>
+        /* General body styles */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        /* Table cell styles */
+        td {
+            display: table-cell;
+            vertical-align: middle;
+            unicode-bidi: isolate;
+            padding: 10px;
+        }
+
+        /* Table styles */
+        table {
+            border-collapse: separate;
+            text-indent: initial;
+            border-spacing: 2px;
+        }
+
+        /* Custom styles for the table */
+        table.custom {
+            border-color: black;
+            border-radius: 25px;
+            width: 100%;
+            max-width: 500px;
+            text-align: left;
+            background-color: rgb(208, 228, 254);
+            border-style: outset;
+            margin: 0 auto;
+        }
+
+        /* Input styles */
+        input[type="text"], input[type="submit"], input[type="button"] {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        input[type="submit"], input[type="button"] {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover, input[type="button"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body oncontextmenu="return false">
+    <form id="myForm" name="searchResult" action="javascript:void(0);" onsubmit="return formValidation()">
+        <div class="CommentBox" align="center">
+            <input type="hidden" name="degree" value="btech">
+            <input type="hidden" name="examCode" value="1790">
+            <input type="hidden" name="etype" value="r17">
+            <input type="hidden" name="result" value="null">
+            <input type="hidden" name="grad" value="null">
+            <input type="hidden" name="type" value="intgrade">
+
+            <br><br>
+            <table class="custom">
+                <tbody>
+                    <tr>
+                        <td>Enter HallTicket Number</td>
+                        <td><input type="text" name="htno" required="required" id="htno" min="1" max="10"></td>
+                        <td><div style="color: #FF0000;"></div></td>
+                    </tr>
+                    <tr>
+                        <td>Enter Date of Birth</td>
+                        <td><input type="text" required="" id="datepicker" value="" class="hasDatepicker" placeholder="YYYY/MM/DD"></td>
+                        <td>YYYY/MM/DD</td>
+                    </tr>
+                    <tr>
+                        <td>Please enter this Captcha code in the box below<br></td>
+                        <td><input type="text" id="txtCaptcha" style="color: #4e2016; text-align: center; border: darkline; font-weight: bold; font-family: Modern" disabled="disabled"></td>
+                        <td><input type="button" id="btnrefresh" value="Refresh" onclick="refreshCaptcha();"><br></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><input type="text" id="txtInput" required="required" placeholder="Enter Captcha"></td>
+                        <td><input type="submit" value="Submit"><br></td>
+                    </tr>
+                </tbody>
+            </table>
+            <br>
+        </div>
+    </form>
+
+    <script>
+        // Function to generate a random string of given length
+        function generateRandomString(length) {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let result = '';
+            for (let i = 0; i < length; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return result;
+        }
+
+        // Function to create a captcha
+        function createCaptcha() {
+            return generateRandomString(6); // Generate a random string of 6 characters
+        }
+
+        // Function to assign a new captcha to the input field
+        function refreshCaptcha() {
+            document.getElementById('txtCaptcha').value = createCaptcha();
+        }
+
+        // Initial captcha generation on page load
+        window.onload = refreshCaptcha;
+
+        // Form validation and submission
+        function formValidation() {
+            const hallTicket = document.getElementById('htno').value.trim();
+            const captchaInput = document.getElementById('txtInput').value.trim();
+            const captchaGenerated = document.getElementById('txtCaptcha').value.trim();
+
+            if (captchaInput !== captchaGenerated) {
+                alert('Invalid Captcha. Please try again.');
+                return false;
+            }
+
+            const validHallTickets = ['21p75a6601', '21p75a6602', '21p75a6603', '21p75a6604', '21p75a6605'];
+            if (validHallTickets.includes(hallTicket.toLowerCase())) {
+                window.location.href = hallTicket.toLowerCase() + '.html';
+            } else {
+                alert('Invalid HallTicket Number. Please try again.');
+            }
+            return false;
+        }
+    </script>
+</body>
+</html>
